@@ -24,50 +24,51 @@ public class DataController : ControllerBase
 
     
     [HttpGet]
-    public ActionResult<List<DataModel>> Get()
+    public IActionResult Get()
     {
-        return Ok(data.ToList());
+        return Ok(_context.Data.ToList());   
     }
     
 
-    [HttpGet("{id}")]
-    public ActionResult<DataModel> Get(int id)
-    {
-        var dt = data.Find(q => q.Id == id);
-        if (dt == null)
-            return BadRequest("Data not found.");
-        return Ok(dt);
-    }
+    //[HttpGet("{id}")]
+    //public IActionResult Get(int id)
+    //{
+    //    var ss = _context.Data.Find(t => t.Id == id);
+    //    var dt = data.Find(q => q.Id == id);
+    //    if (dt == null)
+    //        return BadRequest("Data not found.");
+    //    return Ok(dt);
+    //}
 
     [HttpPost]
-    public ActionResult<List<DataModel>> AddData(DataModel dt)
+    public IActionResult AddData(DataModel dt)
     {
-        data.Add(dt);
-        return Ok(data);
+        _context.Data.Add(dt);
+        return Ok(_context.Data.ToList());
     }
 
-    [HttpPut]
-    public ActionResult<List<DataModel>> UpdateData(DataModel request)
-    {
-        var dt = data.Find(q => q.Id == request.Id);
-        if (dt == null)
-            return BadRequest("Data not found.");
+    //[HttpPut]
+    //public ActionResult<List<DataModel>> UpdateData(DataModel request)
+    //{
+    //    var dt = data.Find(q => q.Id == request.Id);
+    //    if (dt == null)
+    //        return BadRequest("Data not found.");
 
-        dt.Number = request.Number;
-        dt.Text = request.Text;
+    //    dt.Number = request.Number;
+    //    dt.Text = request.Text;
 
-        return Ok(data);
-    }
+    //    return Ok(data);
+    //}
 
-    [HttpDelete("{id}")]
-    public ActionResult<DataModel> Delete(int id)
-    {
-        var dt = data.Find(q => q.Id == id);
-        if (dt == null)
-            return BadRequest("Data not found.");
+    //[HttpDelete("{id}")]
+    //public ActionResult<DataModel> Delete(int id)
+    //{
+    //    var dt = data.Find(q => q.Id == id);
+    //    if (dt == null)
+    //        return BadRequest("Data not found.");
 
-        data.Remove(dt);
-        return Ok(dt);
-    }
+    //    data.Remove(dt);
+    //    return Ok(dt);
+    //}
     
 }
