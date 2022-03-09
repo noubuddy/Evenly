@@ -6,6 +6,6 @@
         public string? Title { get; set; }
         public string? Description { get; set; }
         public string? Coordinates { get; set; }
-        public DateTime Time { get; set; }
+        public DateTime Time { get; set; } = new DateTime();
     }
 }
