@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Evenly.Contexts;
 using Evenly.Models;
 using System.Security.Cryptography;
 using System.Security.Claims;
@@ -15,9 +16,11 @@ namespace Evenly.Controllers
     {
         public static User user = new User();
         private readonly IConfiguration _configuration;
+        private readonly Context _context;
 
-        public AuthController(IConfiguration configuration)
+        public AuthController(IConfiguration configuration, Context context)
         {
+            _context = context;
             _configuration = configuration;
         }
 
@@ -29,6 +32,13 @@ namespace Evenly.Controllers
             user.Username = request.Username;
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
+
+            User _user = new User();
+            _user.Username = user.Username;
+            _user.PasswordHash = user.PasswordHash;
+            _user.PasswordSalt = user.PasswordSalt;
+
+            _context.User.Add(_user);
 
             return Ok(user);
         }
@@ -43,6 +53,7 @@ namespace Evenly.Controllers
                 return BadRequest("Wrong password");
 
             string token = CreateToken(user);
+            
             return Ok(token);
         }
 

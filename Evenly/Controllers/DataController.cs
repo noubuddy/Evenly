@@ -9,8 +9,8 @@ namespace Evenly.Controllers
     [ApiController]
     public class DataController : ControllerBase
     {
-        private readonly DataContext _context;
-        public DataController(DataContext context)
+        private readonly Context _context;
+        public DataController(Context context)
         {
             _context = context;
         }

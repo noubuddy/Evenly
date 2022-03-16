@@ -5,13 +5,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Evenly.Contexts
 {
-    public class DataContext : DbContext
+    public class Context : DbContext
     {
-        public DataContext(DbContextOptions options) : base(options)
+        public Context(DbContextOptions options) : base(options)
         {
         }
 
         public DbSet<Data> Data { get; set; }
+        public DbSet<User> User { get; set; }
 
     }
 }
