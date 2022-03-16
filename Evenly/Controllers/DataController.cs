@@ -32,15 +32,15 @@ namespace Evenly.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddData(DataModel dt)
+        public IActionResult AddData(Data data)
         {
-            _context.Data.Add(dt);
+            _context.Data.Add(data);
             _context.SaveChanges();
             return Ok(_context.Data.ToList());
         }
 
         [HttpPut]
-        public IActionResult UpdateData(DataModel request)
+        public IActionResult UpdateData(Data request)
         {
             var dt = _context.Data.Find(request.Id);
             if (dt == null)

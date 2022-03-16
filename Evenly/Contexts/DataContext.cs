@@ -11,7 +11,7 @@ namespace Evenly.Contexts
         {
         }
 
-        public DbSet<DataModel> Data { get; set; }
+        public DbSet<Data> Data { get; set; }
 
     }
 }
