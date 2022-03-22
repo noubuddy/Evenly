@@ -41,11 +41,26 @@ namespace Evenly.Controllers
             return Ok(us);
         }
 
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            var us = _context.User.Find(id);
+            if (us == null)
+                return BadRequest("Data not found");
+
+            _context.User.Remove(us);
+            _context.SaveChanges();
+
+            return Ok(_context.User.ToList());
+        }
+
         [HttpPost("Register")]
         public IActionResult Register(UserDto request)
         {
             if (_context.User.Any(x => x.Username == request.Username))
                 return BadRequest("User already exits"); 
+
+            user = new User();
 
             CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
 

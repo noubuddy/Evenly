@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Evenly.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20220322204909_CreateInitial")]
+    [Migration("20220322213808_CreateInitial")]
     partial class CreateInitial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
