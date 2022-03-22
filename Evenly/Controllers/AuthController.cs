@@ -1,3 +1,4 @@
+using System.Reflection.Metadata;
 using Microsoft.AspNetCore.Mvc;
 using Evenly.Contexts;
 using Evenly.Models;
@@ -5,6 +6,7 @@ using System.Security.Cryptography;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Text.Json;
 
 #nullable disable
 
@@ -24,37 +26,55 @@ namespace Evenly.Controllers
             _configuration = configuration;
         }
 
-        [HttpPost("register")]
+        [HttpGet]
+        public IActionResult Get()
+        {
+            return Ok(_context.User.ToList());
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult Get(int id)
+        {
+            var us = _context.User.Find(id);
+            if (us == null)
+                return BadRequest("User not found");
+            return Ok(us);
+        }
+
+        [HttpPost("Register")]
         public IActionResult Register(UserDto request)
         {
+            if (_context.User.Any(x => x.Username == request.Username))
+                return BadRequest("User already exits"); 
+
             CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
 
             user.Username = request.Username;
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
+            user.Email = request.Email;
+            user.CreatedAt = ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds();
 
-            User _user = new User();
-            _user.Username = user.Username;
-            _user.PasswordHash = user.PasswordHash;
-            _user.PasswordSalt = user.PasswordSalt;
-
-            _context.User.Add(_user);
+            _context.User.Add(user);
+            _context.SaveChanges();
 
             return Ok(user);
         }
 
-        [HttpPost("login")]
-        public IActionResult Login(UserDto requset)
+        [HttpPost("Login")]
+        public IActionResult Login(UserDto request)
         {
-            if (user.Username != requset.Username)
-                return BadRequest("User not found.");
+            if (_context.User.Any(x => x.Username != request.Username))
+                return BadRequest("User not found");
 
-            if (!VerifyPasswordHash(requset.Password, user.PasswordHash, user.PasswordSalt))
+            user = _context.User.First(x => x.Username == request.Username);
+
+            if (!VerifyPasswordHash(request.Password, user.PasswordHash, user.PasswordSalt))
                 return BadRequest("Wrong password");
 
-            string token = CreateToken(user);
-            
-            return Ok(token);
+            Jwt token = new Jwt {Token = CreateToken(user)};
+
+            return Ok(JsonSerializer.Serialize(token));
         }
 
         private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)

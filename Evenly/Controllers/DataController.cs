@@ -27,7 +27,7 @@ namespace Evenly.Controllers
         {
             var dt = _context.Data.Find(id);
             if (dt == null)
-                return BadRequest("Data not found.");
+                return BadRequest("Data not found");
             return Ok(dt);
         }
 
@@ -44,7 +44,7 @@ namespace Evenly.Controllers
         {
             var dt = _context.Data.Find(request.Id);
             if (dt == null)
-                return BadRequest("Data not found.");
+                return BadRequest("Data not found");
 
             dt.Title = request.Title;
             dt.Description = request.Description;
@@ -61,7 +61,7 @@ namespace Evenly.Controllers
         {
             var dt = _context.Data.Find(id);
             if (dt == null)
-                return BadRequest("Data not found.");
+                return BadRequest("Data not found");
 
             _context.Data.Remove(dt);
 
