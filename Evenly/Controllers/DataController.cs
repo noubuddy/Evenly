@@ -10,9 +10,12 @@ namespace Evenly.Controllers
     public class DataController : ControllerBase
     {
         private readonly Context _context;
-        public DataController(Context context)
+        private static IWebHostEnvironment _enviroment;
+        private FileUpload obj;
+        public DataController(Context context, IWebHostEnvironment environment)
         {
             _context = context;
+            _enviroment = environment;
         }
 
         [HttpGet]
@@ -34,6 +37,17 @@ namespace Evenly.Controllers
         [HttpPost]
         public IActionResult AddData(Data data)
         {
+            // if (!Directory.Exists(_enviroment.WebRootPath + "\\Resources\\Images\\"))
+            //     Directory.CreateDirectory(_enviroment.WebRootPath + "\\Resources\\Images\\");
+
+            // using (FileStream fs = System.IO.File.Create(_enviroment.WebRootPath + "\\Resources\\Images\\" + obj.file.FileName))
+            // {
+            //     obj.file.CopyTo(fs);
+            //     fs.Flush();
+            //     data.Image = fs.ToString();
+            // }
+
+            data.CreatedAt = ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds();
             _context.Data.Add(data);
             _context.SaveChanges();
             return Ok(_context.Data.ToList());
@@ -49,7 +63,7 @@ namespace Evenly.Controllers
             dt.Title = request.Title;
             dt.Description = request.Description;
             dt.Coordinates = request.Coordinates;
-            dt.Time = request.Time;
+            dt.CreatedAt = ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds();
 
             _context.SaveChanges();
 
