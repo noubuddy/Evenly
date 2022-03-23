@@ -58,7 +58,7 @@ namespace Evenly.Controllers
         public IActionResult Register(UserDto request)
         {
             if (_context.User.Any(x => x.Username == request.Username))
-                return BadRequest("User already exits"); 
+                return BadRequest("User already exits");
 
             user = new User();
 
@@ -79,17 +79,21 @@ namespace Evenly.Controllers
         [HttpPost("Login")]
         public IActionResult Login(UserDto request)
         {
-            if (_context.User.Any(x => x.Username != request.Username))
+            try
+            {
+                user = _context.User.Where(x => x.Username == request.Username.ToString()).First();
+
+                if (!VerifyPasswordHash(request.Password, user.PasswordHash, user.PasswordSalt))
+                    return BadRequest("Wrong password");
+
+                Jwt token = new Jwt { Token = CreateToken(user) };
+
+                return Ok(token);
+            }
+            catch (Exception e)
+            {
                 return BadRequest("User not found");
-
-            user = _context.User.First(x => x.Username == request.Username);
-
-            if (!VerifyPasswordHash(request.Password, user.PasswordHash, user.PasswordSalt))
-                return BadRequest("Wrong password");
-
-            Jwt token = new Jwt {Token = CreateToken(user)};
-
-            return Ok(JsonSerializer.Serialize(token));
+            }
         }
 
         private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
