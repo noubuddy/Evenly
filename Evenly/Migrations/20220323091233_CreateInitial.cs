@@ -21,7 +21,7 @@ namespace Evenly.Migrations
                     Description = table.Column<string>(type: "text", nullable: true),
                     Coordinates = table.Column<string>(type: "text", nullable: true),
                     Image = table.Column<string>(type: "text", nullable: true),
-                    Time = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    CreatedAt = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {

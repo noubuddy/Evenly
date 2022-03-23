@@ -33,6 +33,9 @@ namespace Evenly.Migrations
                     b.Property<string>("Coordinates")
                         .HasColumnType("text");
 
+                    b.Property<long>("CreatedAt")
+                        .HasColumnType("bigint");
+
                     b.Property<int>("CreatorID")
                         .HasColumnType("integer");
 
@@ -41,9 +44,6 @@ namespace Evenly.Migrations
 
                     b.Property<string>("Image")
                         .HasColumnType("text");
-
-                    b.Property<DateTime>("Time")
-                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Title")
                         .HasColumnType("text");
