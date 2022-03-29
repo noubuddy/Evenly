@@ -90,7 +90,7 @@ namespace Evenly.Controllers
 
                 return Ok(token);
             }
-            catch (Exception e)
+            catch
             {
                 return BadRequest("User not found");
             }

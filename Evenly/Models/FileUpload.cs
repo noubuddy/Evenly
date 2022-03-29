@@ -1,7 +1,8 @@
 namespace Evenly.Models
 {
+#nullable disable
     public class FileUpload
     {
-        public IFormFile? file { get; set; }
+        public IFormFile Image { get; set; }
     }
 }
