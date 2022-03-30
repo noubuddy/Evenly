@@ -11,20 +11,20 @@ namespace Evenly.Controllers
     {
         private readonly Context _context;
         private static IWebHostEnvironment? _enviroment;
-        // private FileUpload? obj;
         public DataController(Context context, IWebHostEnvironment environment)
         {
             _context = context;
             _enviroment = environment;
         }
 
+        // Get all data
         [HttpGet]
         public IActionResult Get()
         {
             return Ok(_context.Data.ToList());
         }
 
-
+        // Get data by id
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
@@ -34,31 +34,18 @@ namespace Evenly.Controllers
             return Ok(dt);
         }
 
+        // Add data
         [HttpPost]
         public IActionResult AddData(Data data)
         {
-            // if (staticFile.Image.Length > 0)
-            // {
-            //     if (!Directory.Exists(_enviroment!.WebRootPath + "\\Upload\\"))
-            //         Directory.CreateDirectory(_enviroment.WebRootPath + "\\Upload\\");
-
-            //     using (FileStream fs = System.IO.File.Create(_enviroment.WebRootPath + "\\Upload\\" + staticFile.Image.FileName))
-            //     {
-            //         staticFile.Image.CopyTo(fs);
-            //         fs.Flush();
-            //         //return Ok(_enviroment.WebRootPath + "\\Upload\\" + data.Image.FileName);
-            //     }
-            // }
-
-            // data.ImagePath = _enviroment.WebRootPath + "\\Upload\\" + staticFile.Image.FileName;
             data.CreatedAt = ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds();
             _context.Data.Add(data);
             _context.SaveChanges();
             return Ok(_context.Data.ToList());
-            // return Ok(data.ImagePath);
         }
 
-        [HttpPost("upload")]
+        // Add image
+        [HttpPost("image")]
         public IActionResult Upload([FromForm] FileUpload image)
         {
             // upload image
@@ -77,6 +64,16 @@ namespace Evenly.Controllers
             return BadRequest("Uploading failed");
         }
 
+        // Get image by filename
+        [HttpGet("image/{filename}")]
+        public IActionResult GetImage(string filename)
+        {
+            string[] type = filename.Split(".");
+            var image = System.IO.File.OpenRead(_enviroment!.WebRootPath + "/Upload/" + filename);
+            return File(image, "image/" + type[1]);
+        }
+
+        // Edit data
         [HttpPut]
         public IActionResult UpdateData(Data request)
         {
@@ -94,6 +91,7 @@ namespace Evenly.Controllers
             return Ok(_context.Data.ToList());
         }
 
+        // Delete data by id
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
