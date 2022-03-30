@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Evenly.Models
 {
@@ -10,7 +11,7 @@ namespace Evenly.Models
         public string Title { get; set; }
         public string Description { get; set; }
         public string Coordinates { get; set; }
-        //public string ImagePath { get; set; }
+        public string ImagePath { get; set; }
         public long CreatedAt { get; set; }
     }
 }

@@ -37,10 +37,25 @@ namespace Evenly.Controllers
         [HttpPost]
         public IActionResult AddData(Data data)
         {
+            // if (staticFile.Image.Length > 0)
+            // {
+            //     if (!Directory.Exists(_enviroment!.WebRootPath + "\\Upload\\"))
+            //         Directory.CreateDirectory(_enviroment.WebRootPath + "\\Upload\\");
+
+            //     using (FileStream fs = System.IO.File.Create(_enviroment.WebRootPath + "\\Upload\\" + staticFile.Image.FileName))
+            //     {
+            //         staticFile.Image.CopyTo(fs);
+            //         fs.Flush();
+            //         //return Ok(_enviroment.WebRootPath + "\\Upload\\" + data.Image.FileName);
+            //     }
+            // }
+
+            // data.ImagePath = _enviroment.WebRootPath + "\\Upload\\" + staticFile.Image.FileName;
             data.CreatedAt = ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds();
             _context.Data.Add(data);
             _context.SaveChanges();
             return Ok(_context.Data.ToList());
+            // return Ok(data.ImagePath);
         }
 
         [HttpPost("upload")]
@@ -49,14 +64,14 @@ namespace Evenly.Controllers
             // upload image
             if (image.Image.Length > 0)
             {
-                if (!Directory.Exists(_enviroment!.WebRootPath + "\\Upload\\"))
-                    Directory.CreateDirectory(_enviroment.WebRootPath + "\\Upload\\");
+                if (!Directory.Exists(_enviroment!.WebRootPath + "/Upload/"))
+                    Directory.CreateDirectory(_enviroment.WebRootPath + "/Upload/");
 
-                using (FileStream fs = System.IO.File.Create(_enviroment.WebRootPath + "\\Upload\\" + image.Image.FileName))
+                using (FileStream fs = System.IO.File.Create(_enviroment.WebRootPath + "/Upload/" + image.Image.FileName))
                 {
                     image.Image.CopyTo(fs);
                     fs.Flush();
-                    return Ok(_enviroment.WebRootPath + "\\Upload\\" + image.Image.FileName);
+                    return Ok(_enviroment.WebRootPath + "/Upload/" + image.Image.FileName);
                 }
             }
             return BadRequest("Uploading failed");
