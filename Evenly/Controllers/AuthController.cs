@@ -1,4 +1,3 @@
-using System.Reflection.Metadata;
 using Microsoft.AspNetCore.Mvc;
 using Evenly.Contexts;
 using Evenly.Models;
@@ -6,7 +5,6 @@ using System.Security.Cryptography;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
-using System.Text.Json;
 
 #nullable disable
 

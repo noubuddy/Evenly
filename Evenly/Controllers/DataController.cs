@@ -61,16 +61,23 @@ namespace Evenly.Controllers
                     return Ok(_enviroment.WebRootPath + "/Upload/" + image.Image.FileName);
                 }
             }
-            return BadRequest("Uploading failed");
+            return BadRequest("Image uploading failed");
         }
 
         // Get image by filename
         [HttpGet("image/{filename}")]
         public IActionResult GetImage(string filename)
         {
-            string[] type = filename.Split(".");
-            var image = System.IO.File.OpenRead(_enviroment!.WebRootPath + "/Upload/" + filename);
-            return File(image, "image/" + type[1]);
+            try
+            {
+                string[] type = filename.Split(".");
+                var image = System.IO.File.OpenRead(_enviroment!.WebRootPath + "/Upload/" + filename);
+                return File(image, "image/" + type[type.Length - 1]);
+            }
+            catch
+            {
+                return BadRequest("Failed to get image");
+            }
         }
 
         // Edit data
